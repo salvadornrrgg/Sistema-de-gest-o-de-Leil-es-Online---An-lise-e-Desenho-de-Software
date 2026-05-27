@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"project","l":"Artigo"},{"p":"project","l":"CatalogoDeLeiloes"},{"p":"project","l":"GestorLeilao"},{"p":"project","l":"HistoricoLeiloes"},{"p":"project","l":"Leilao"},{"p":"project","l":"Licitacao"},{"p":"project","l":"RunProject"},{"p":"project","l":"Utilizador"}];updateSearchResults();
