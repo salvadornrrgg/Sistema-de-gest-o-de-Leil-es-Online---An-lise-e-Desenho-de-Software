@@ -55,13 +55,17 @@ public class Leilao {
 	 * UC02 - Configura os parâmetros financeiros e de tempo do leilão.
 	 * Apenas leilões no estado "Criado" podem ser configurados. Se a operação tiver sucesso,
 	 * o estado avança para "Configurado".
+	 * @param tituloLeilao O novo título do leilão que quero substituir.
+	 * @param descricaoLeilao A nova descrição do leilão que quero substituir.
 	 * @param dataFim A data e hora exata em que o leilão deixa de aceitar licitações.
 	 * @param valorInicial O montante base pelo qual as licitações devem começar.
 	 * @param precoCompreJa O valor opcional que permite a um comprador fechar imediatamente o leilão.
 	 * @param categoria A categoria onde o leilão se insere (ex: Tecnologia, Automóveis).
 	 */
-	public void configurar(LocalDateTime dataFim, double valorInicial, double precoCompreJa, String categoria) {
+	public void configurar(String tituloLeilao, String descricaoLeilao, LocalDateTime dataFim, double valorInicial, double precoCompreJa, String categoria) {
         if (this.estado.equals("Criado")) {
+            this.tituloLeilao = tituloLeilao;
+            this.descricaoLeilao = descricaoLeilao;
             this.dataFim = dataFim;
             this.valorInicial = valorInicial;
             this.precoCompreJa = precoCompreJa;
@@ -130,32 +134,50 @@ public class Leilao {
         this.estado = "Encerrado";
     }
     
-    /** @return O identificador único do leilão. */
+    /** 
+     * Obtém o identificador do leilão.
+     * @return O identificador único do leilão. 
+     */    
     public int getIdLeilao() {
     	return idLeilao; 
     }
     
-    /** @return O utilizador que atua como vendedor neste leilão. */
+    /** 
+     * Obtém o vendedor do leilão.
+     * @return O utilizador que atua como vendedor neste leilão. 
+     */    
     public Utilizador getVendedor() {
     	return vendedor; 
     }
     
-    /** @return O utilizador que venceu, ou que lidera atualmente o leilão. */
+    /** 
+     * Obtém o vencedor atual do leilão.
+     * @return O utilizador que venceu, ou que lidera atualmente o leilão. 
+     */
     public Utilizador getVencedor() { 
     	return vencedor; 
     }
     
-    /** @return O estado atual do ciclo de vida do leilão (ex: Ativo, Encerrado). */
+    /** 
+     * Obtém o estado do leilão.
+     * @return O estado atual do ciclo de vida do leilão (ex: Ativo, Encerrado). 
+     */
     public String getEstado() { 
     	return estado; 
     }
     
-    /** @return O valor monetário mais alto licitado até ao momento. */
+    /**
+     * Obtém o valor atual do leilão.
+     * @return O valor monetário mais alto licitado até ao momento. 
+     */
     public double getValorAtual() {
     	return valorAtual; 
     }
     
-    /** @return A data e hora de término planeada para o leilão. */
+    /**
+     * Obtém a data de fim do leilão.
+     * @return A data e hora de término planeada para o leilão. 
+     */
     public LocalDateTime getDataFim() { 
     	return dataFim; 
     }

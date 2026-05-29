@@ -34,12 +34,18 @@ public class Licitacao {
 		this.estado = "Ativa";
 	}
 	
-	/** @return O valor monetário desta licitação. */
+	/**
+	 * Obtém o valor da licitação.
+	 * @return O valor monetário desta licitação. 
+	 */
 	public double getValor() {
 		return this.valor;
 	}
 	
-	/** @return O utilizador que realizou esta licitação. */
+	/**
+	 * Obtém o utilizador licitante.
+	 * @return O utilizador que realizou esta licitação. 
+	 */
 	public Utilizador getLicitante() {
 		return this.licitante; 
 	}
@@ -52,17 +58,26 @@ public class Licitacao {
 		this.estado = "Anulada";
 	}
 	
-	/** @return A data e hora exatas em que a licitação foi registada pelo sistema. */
+	/**
+	 * Obtém a data e hora da licitação.
+	 * @return A data e hora exatas em que a licitação foi registada pelo sistema. 
+	 */
 	public LocalDateTime getDataHora() {
 		return this.dataHora;
 	}
 	
-	/** @return O estado atual da licitação (ex: Ativa, Anulada). */
+	/**
+	 * Obtém o estado da licitação.
+	 * @return O estado atual da licitação (ex: Ativa, Anulada). 
+	 */
 	public String getEstado() {
 		return this.estado;
 	}
 	
-	/** @return O identificador único numérico desta licitação. */
+	/**
+	 * Obtém o identificador da licitação.
+	 * @return O identificador único numérico desta licitação. 
+	 */
 	public int getIdLicitacao() {
 	    return this.idLicitacao;
 	}

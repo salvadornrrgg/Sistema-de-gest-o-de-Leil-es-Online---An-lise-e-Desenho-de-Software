@@ -5,38 +5,49 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 
 /**
- * Executa a aplicação
- * @author ...
+ * Executa a aplicação simulando o comportamento do sistema.
+ * <p>
+ * Funciona como o ponto de entrada principal para testar o fluxo completo
+ * dos casos de uso (criar, configurar, publicitar, licitar e encerrar leilões).
+ * </p>
+ * @author Salvador Gonçalves, Miguel Sousa, Daniel Santos, Tomás Farinha / Grupo 75
+ * @version 1.0
  */
 public class RunProject {
-
-    /**
-     * Inicia a execução da aplicação e/ou de testes scriptados
-     *
-     * @param args
-     * @throws FileNotFoundException
+	/**
+     * Construtor por omissão.
+     * Como esta classe apenas executa o método main, não precisa de ser instanciada.
      */
+    public RunProject() {
+    }
+    
+    /**
+     * Inicia a execução da aplicação de simulação.
+     *
+     * @param args Argumentos da linha de comandos (não utilizados neste projeto).
+     * @throws FileNotFoundException Caso não seja possível criar ou aceder ao ficheiro de output.
+     */
+	    
     public static void main(String[] args) throws FileNotFoundException {
         execute();
     }
 
     /**
-     * Uma execução em particular
+     * Executa uma simulação em particular, instanciando as classes e testando as regras de negócio.
      *
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException Caso não seja possível escrever no ficheiro "output.txt".
      */
     private static void execute() throws FileNotFoundException {
         PrintWriter writer = new PrintWriter("./out/output.txt");
 
-        // ...
         System.out.println(" INÍCIO DO SISTEMA DE GESTÃO DE LEILÕES ONLINE \n");
 
-        // Prepara se o sistema
+        // Prepara-se o sistema
         CatalogoDeLeiloes catalogo = new CatalogoDeLeiloes();
         HistoricoLeiloes historico = new HistoricoLeiloes();
         GestorLeilao gestor = new GestorLeilao(catalogo, historico);
 
-        // Cria se os utilizadores
+        // Criam-se os utilizadores
         Utilizador vendedor = new Utilizador(1, "VendedoraAna", "hash123", "ana@ciencias.pt", "Lisboa");
         Utilizador comprador1 = new Utilizador(2, "JoaoFCUL", "hash456", "joao@ciencias.pt", "Porto");
         Utilizador comprador2 = new Utilizador(3, "MariaCadi", "hash789", "maria@ciencias.pt", "Faro");
@@ -52,8 +63,8 @@ public class RunProject {
 
         // UC02: CONFIGURAR LEILÃO
         System.out.println("\n[UC02] Configurar Leilão...");
-        // Configuramos para terminar daqui a 1 dias, com valor inicial de 450€
-        leilao1.configurar(LocalDateTime.now().plusDays(1), 450.0, 1000.0, "Informática");
+        // Atualizado: Agora passamos o Título e a Descrição como definimos na arquitetura!
+        leilao1.configurar("Leilão de Portátil", "Aproveite a oportunidade!", LocalDateTime.now().plusDays(1), 450.0, 1000.0, "Informática");
         System.out.println("> Leilão configurado. Valor Inicial: 450.0€");
 
         // UC03: PUBLICITAR LEILÃO 
@@ -77,8 +88,8 @@ public class RunProject {
         leilao1.licitar(comprador2, 650.0);
 
         // UC05: ENCERRAR LEILÃO
-        System.out.println("\n[UC05] Ecerraro Leilão...");
-        // O Gestor é quem vai fechar e arquivar o leilao
+        System.out.println("\n[UC05] Encerrar Leilão...");
+        // O Gestor é quem vai fechar e arquivar o leilão
         gestor.encerrarLeilao(1001);
 
         // Verificar Histórico
@@ -92,5 +103,5 @@ public class RunProject {
         writer.println("Simulação concluída com sucesso. Verifica a consola para ver os detalhes da execução!");
         writer.close();
 
-    };
+    }
 }
