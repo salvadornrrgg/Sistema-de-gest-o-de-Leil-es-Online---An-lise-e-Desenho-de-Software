@@ -203,12 +203,12 @@ public class RunProject {
                     
                     // Lógica do Bot, Se a oferta for igual ou superior a 200€, o Bot desiste.
                     if (valorLicitacao >= 200.0) {
-                        System.out.println(">>> O 'JoaoBot' achou esse valor demasiado caro e abandonou a sala!");
+                        System.out.println(">>> O 'JoaoBot' achou esse valor demasiado alto e abandonou o leilão!");
                         break; 
                     } else {
                         // O Bot cobre a tua oferta com mais 10€
                         double contraProposta = valorLicitacao + 10.0;
-                        System.out.println(">>> O 'JoaoBot' não desarma e cobre a sua oferta com " + contraProposta + "€!");
+                        System.out.println(">>> O 'JoaoBot' não desiste e cobre a sua oferta com " + contraProposta + "€!");
                         leilao.licitar(botAdversario, contraProposta);
                     }
                     
