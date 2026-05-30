@@ -38,7 +38,7 @@ public class RunProject {
         System.out.println("    SISTEMA DE GESTÃO DE LEILÕES ONLINE (G75)     ");
         System.out.println("==================================================");
         System.out.println("Escolha o modo de execução:");
-        System.out.println("1 - Testes Scriptados (3 Cenários Automáticos)");
+        System.out.println("1 - Testes Scriptados (4 Cenários Automáticos)");
         System.out.println("2 - Teste Interativo (Modo Manual)");
         System.out.print("> Opção: ");
         
@@ -71,9 +71,9 @@ public class RunProject {
         HistoricoLeiloes historico = new HistoricoLeiloes();
         GestorLeilao gestor = new GestorLeilao(catalogo, historico);
 
-        Utilizador ana = new Utilizador(1, "AnaVende", "hash", "ana@ciencias.pt", "Lisboa");
-        Utilizador joao = new Utilizador(2, "JoaoCompra", "hash", "joao@ciencias.pt", "Porto");
-        Utilizador maria = new Utilizador(3, "MariaCompra", "hash", "maria@ciencias.pt", "Faro");
+        Utilizador ana = new Utilizador(1, "Ana", "hash", "ana@ciencias.pt", "Lisboa");
+        Utilizador joao = new Utilizador(2, "Joao", "hash", "joao@ciencias.pt", "Porto");
+        Utilizador maria = new Utilizador(3, "Maria", "hash", "maria@ciencias.pt", "Faro");
 
         // --- CENÁRIO 1: O CAMINHO FELIZ ---
         log("--- CENÁRIO 1: O CAMINHO FELIZ ---", writer);
@@ -85,8 +85,8 @@ public class RunProject {
         ana.configurarLeilao(leilao1, "Portátil Gaming", "Como novo", LocalDateTime.now().plusDays(2), 500.0, 1000.0, "Informática");
         ana.publicitarLeilao(leilao1);
         
-        log("> Leilão 1001 Publicitado. Valor Base: 500.0€", writer);
-        log("> João, Maria e João disputam o leilão.", writer);
+        log("> Leilão do Portátil Gaming Publicitado. Valor Base: 500.0€", writer);
+        log("> João e Maria disputam o leilão. Ana é a vendedora", writer);
         joao.efetuarLicitacao(leilao1, 550.0);
         maria.efetuarLicitacao(leilao1, 600.0);
         joao.efetuarLicitacao(leilao1, 750.0);
@@ -94,7 +94,7 @@ public class RunProject {
         gestor.encerrarLeilao(1001);
         log("> Resultado: Leilão Encerrado. Vencedor: " + leilao1.getVencedor().getUsername() + "\n", writer);
 
-        // --- CENÁRIO 2: O CHICO-ESPERTO (Regras de Negócio) ---
+        // --- CENÁRIO 2: Regras de Negócio ---
         log("--- CENÁRIO 2: REGRAS DE NEGÓCIO ---", writer);
         Leilao leilao2 = joao.criarLeilao(1002, "Bicicleta", "BTT", 102, "BTT", "Nova", "Novo", new ArrayList<>());
         catalogo.adicionarLeilao(leilao2);
@@ -104,25 +104,30 @@ public class RunProject {
         maria.efetuarLicitacao(leilao2, 250.0); // Bloqueado
         
         joao.publicitarLeilao(leilao2);
-        log("> Tentativa de licitação abaixo do valor base (150€):", writer);
+        log("\n> Tentativa de licitação de 150€, abaixo do valor base de 200€:", writer);
         maria.efetuarLicitacao(leilao2, 150.0); // Bloqueado
         log("- Leilão continua ativo e sem vencedor.\n", writer);
 
-        // --- CENÁRIO 3: LEILÃO DESERTO ---
-        log("--- CENÁRIO 3: LEILÃO DESERTO ---", writer);
+     // --- CENÁRIO 3: LEILÃO SEM LICITAÇÕES ---
+        log("--- CENÁRIO 3: LEILÃO SEM LICITAÇÕES ---", writer);
         Leilao leilao3 = maria.criarLeilao(1003, "Tapete", "Sala", 103, "Tapete", "Lã", "Usado", new ArrayList<>());
         catalogo.adicionarLeilao(leilao3);
+        
+        log("> Maria configura o leilão com uma data já expirada (há 1 minuto) para testes:", writer);
         maria.configurarLeilao(leilao3, "Tapete", "Barato", LocalDateTime.now().minusMinutes(1), 50.0, 100.0, "Casa");
         maria.publicitarLeilao(leilao3);
         
-        log("> Ana tenta licitar depois da hora expirada:", writer);
-        ana.efetuarLicitacao(leilao3, 60.0); // Bloqueado
+        log("> Ana tenta licitar mas o tempo já esgotou", writer);
+        ana.efetuarLicitacao(leilao3, 60.0); // O sistema bloqueia e avisa a Ana
         
-        gestor.encerrarLeilao(1003);
+        log("\n> O sistema encerra o leilão e avisa a vendedora da falta de interessados:", writer);
+        gestor.encerrarLeilao(1003); // O sistema avisa a Maria (vendedora)
+        
         log("> Resultado: Leilão Encerrado sem vencedores.\n", writer);
-
-        // --- CENÁRIO 4: EMPATE E BATALHA AO CÊNTIMO ---
-        log("--- CENÁRIO 4: EMPATE E BATALHA AO CÊNTIMO ---", writer);
+        
+        
+        // --- CENÁRIO 4: EMPATE E LIMITES ---
+        log("--- CENÁRIO 4: EMPATE E LIMITES ---", writer);
         Leilao leilao4 = ana.criarLeilao(1004, "Relógio", "Vintage", 104, "Relógio", "Ouro", "Usado", new ArrayList<>());
         catalogo.adicionarLeilao(leilao4);
         ana.configurarLeilao(leilao4, "Relógio", "Raro", LocalDateTime.now().plusDays(3), 1000.0, 5000.0, "Moda");
@@ -154,11 +159,11 @@ public class RunProject {
         writer.println(mensagem);
     }
     
-    
 
     /**
-     * Executa a simulação interativa, permitindo ao utilizador testar as regras
-     * de licitação através de inputs na consola.
+     * Executa a simulação interativa com um adversário virtual (Bot).
+     * O leilão termina quando o utilizador digita 0, ou quando ultrapassa
+     * o limite de orçamento do Bot.
      * @param scanner O scanner para ler o input do teclado.
      */
     private static void executarInterativo(Scanner scanner) {
@@ -169,33 +174,60 @@ public class RunProject {
         sistemaVendedor.configurarLeilao(leilao, "Consola Retro", "Rara", LocalDateTime.now().plusDays(1), 100.0, 500.0, "Jogos");
         sistemaVendedor.publicitarLeilao(leilao);
         
-        System.out.println("Bem-vindo ao Leilão da Consola Retro!");
+        System.out.println("Bem-vindo ao Leilão de uma 'Consola Retro'!");
         System.out.println("O valor base atual é de: " + leilao.getValorAtual() + "€");
         
         System.out.print("Introduza o seu nome de utilizador: ");
         String nome = scanner.next();
         Utilizador utilizadorReal = new Utilizador(100, nome, "hash", "user@sys.pt", "Local");
+        Utilizador botAdversario = new Utilizador(101, "JoaoBot", "hash", "bot@sys.pt", "Sistema");
         
-        System.out.print("Introduza o valor que deseja licitar (ex: 120,50): ");
-        double valorLicitacao = 0;
-        
-        if (scanner.hasNextDouble()) {
-            valorLicitacao = scanner.nextDouble();
-            System.out.println("\nA processar a sua licitação de " + valorLicitacao + "€...");
+        System.out.println("\n> O 'JoaoBot' também está a participar neste leilão! Prepare-se.");
+
+        while (true) {
+            System.out.print("\nIntroduza o valor que deseja licitar (ou digite 0 para desistir): ");
             
-            // Tenta efetuar a licitação
-            boolean sucesso = leilao.licitar(utilizadorReal, valorLicitacao);
-            
-            // FEEDBACK COMPLETO AO UTILIZADOR
-            if (sucesso) {
-                System.out.println("Parabéns, " + nome + "! Você é o vencedor atual do leilão!");
+            if (scanner.hasNextDouble()) {
+                double valorLicitacao = scanner.nextDouble();
+                
+                if (valorLicitacao == 0) {
+                    System.out.println("\n> Você desistiu do leilão.");
+                    break;
+                }
+                
+                System.out.println("A processar a sua licitação de " + valorLicitacao + "€...");
+                boolean sucesso = leilao.licitar(utilizadorReal, valorLicitacao);
+                
+                if (sucesso) {
+                    System.out.println("Parabéns, " + nome + "! A sua oferta foi aceite.");
+                    
+                    // Lógica do Bot, Se a oferta for igual ou superior a 200€, o Bot desiste.
+                    if (valorLicitacao >= 200.0) {
+                        System.out.println(">>> O 'JoaoBot' achou esse valor demasiado caro e abandonou a sala!");
+                        break; 
+                    } else {
+                        // O Bot cobre a tua oferta com mais 10€
+                        double contraProposta = valorLicitacao + 10.0;
+                        System.out.println(">>> O 'JoaoBot' não desarma e cobre a sua oferta com " + contraProposta + "€!");
+                        leilao.licitar(botAdversario, contraProposta);
+                    }
+                    
+                } else {
+                    System.out.println("Atenção: A licitação foi recusada! O valor tem de ser superior a " + leilao.getValorAtual() + "€.");
+                }
+                
             } else {
-                System.out.println("Atenção: A licitação foi recusada! O valor tem de ser superior ao valor atual (" + leilao.getValorAtual() + "€).");
+                System.out.println("Erro: Valor numérico inválido. Certifique-se que inseriu apenas números.");
+                scanner.next(); 
             }
-            
-        } else {
-            System.out.println("Erro: Valor numérico inválido. Certifique-se que inseriu apenas números.");
         }
+        
+        String nomeVencedor = (leilao.getVencedor() != null) ? leilao.getVencedor().getUsername() : "Sem vencedor";
+        System.out.println("\n==================================================");
+        System.out.println(" RESULTADO FINAL DO LEILÃO DA CONSOLA RETRO");
+        System.out.println(" Vencedor: " + nomeVencedor);
+        System.out.println(" Valor Final Pago: " + leilao.getValorAtual() + "€");
+        System.out.println("==================================================");
         
         System.out.println("\n>>> FIM DO MODO INTERATIVO <<<");
     }

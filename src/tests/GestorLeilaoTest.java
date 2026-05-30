@@ -69,4 +69,25 @@ class GestorLeilaoTest {
         // Verificação
         assertEquals(0, historico.consultarHistorico(1).size(), "O histórico deve continuar vazio, pois o leilão não existia.");
     }
+    
+    
+    /**
+     * Teste Glass-box: Cobre o cenário de encerramento de um leilão sem vencedor.
+     * Garante que o GestorLeilao processa corretamente a notificação alternativa
+     * e arquiva o leilão na mesma.
+     */
+    @Test
+    void testEncerrarLeilaoSemVencedor() {
+        // Criamos um leilão extra no catálogo sem adicionar nenhuma licitação
+        Utilizador vendedorExtra = new Utilizador(99, "VendedorIsolado", "hash", "email@pt", "Local");
+        project.Leilao leilaoVazio = vendedorExtra.criarLeilao(999, "Artigo", "Desc", 99, "Cat", "Desc", "Novo", new java.util.ArrayList<>());
+        catalogo.adicionarLeilao(leilaoVazio);
+        
+        // Executamos o encerramento (o que vai acionar o nosso novo "else")
+        gestor.encerrarLeilao(999);
+        
+        // Verificamos se foi arquivado na mesma
+        assertNull(catalogo.getLeilao(999), "O leilão deve ter saído do catálogo.");
+        assertNotNull(historico.getLeilao(999), "O leilão vazio deve estar no histórico.");
+    }
 }

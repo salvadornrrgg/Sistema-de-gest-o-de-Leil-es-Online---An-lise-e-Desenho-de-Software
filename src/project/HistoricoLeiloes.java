@@ -61,4 +61,13 @@ public class HistoricoLeiloes {
         return historicoUtilizador;
     }
     
+    /**
+     * Procura um leilão específico no histórico através do seu ID.
+     * @param id O identificador do leilão.
+     * @return O leilão correspondente, ou null se não for encontrado.
+     */
+    public Leilao getLeilao(int id) {
+        return this.leiloesEncerrados.get(id);
+    }
+    
 }

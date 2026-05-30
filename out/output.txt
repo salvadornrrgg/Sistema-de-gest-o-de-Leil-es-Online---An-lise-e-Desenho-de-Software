@@ -2,23 +2,27 @@
 >>> A INICIAR MODO SCRIPTADO...
 
 --- CENÁRIO 1: O CAMINHO FELIZ ---
-> Leilão 1001 Publicitado. Valor Base: 500.0€
-> João, Maria e João disputam o leilão.
-> Resultado: Leilão Encerrado. Vencedor: JoaoCompra
+> Leilão do Portátil Gaming Publicitado. Valor Base: 500.0€
+> João e Maria disputam o leilão. Ana é a vendedora
+> Resultado: Leilão Encerrado. Vencedor: Joao
 
 --- CENÁRIO 2: REGRAS DE NEGÓCIO ---
 > Tentativa de licitação antes de publicitar:
-> Tentativa de licitação abaixo do valor base (150€):
+
+> Tentativa de licitação de 150€, abaixo do valor base de 200€:
 - Leilão continua ativo e sem vencedor.
 
---- CENÁRIO 3: LEILÃO DESERTO ---
-> Ana tenta licitar depois da hora expirada:
+--- CENÁRIO 3: LEILÃO SEM LICITAÇÕES ---
+> Maria configura o leilão com uma data já expirada (há 1 minuto) para testes:
+> Ana tenta licitar mas o tempo já esgotou
+
+> O sistema encerra o leilão e avisa a vendedora da falta de interessados:
 > Resultado: Leilão Encerrado sem vencedores.
 
---- CENÁRIO 4: EMPATE E BATALHA AO CÊNTIMO ---
+--- CENÁRIO 4: EMPATE E LIMITES ---
 > João licita 1500.0€
 > Maria tenta empatar licitando exatamente 1500.0€:
 > Maria percebe o erro e licita mais 1 cêntimo (1500.01€):
-> Resultado: Leilão 1004 Encerrado. Vencedor: MariaCompra com 1500.01€
+> Resultado: Leilão 1004 Encerrado. Vencedor: Maria com 1500.01€
 
 >>> FIM DA SIMULAÇÃO SCRIPTADA <<<

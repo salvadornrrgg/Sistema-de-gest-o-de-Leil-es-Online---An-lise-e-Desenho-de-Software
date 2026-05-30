@@ -31,35 +31,41 @@ public class GestorLeilao {
 	 * Executa o processo completo de encerramento de um leilão.
 	 * <p>
 	 * A sequência de operações inclui: procurar o leilão no catálogo, fechá-lo,
-	 * identificar e notificar o vencedor e o vendedor para disponibilizar o formulário
-	 * de avaliação, remover o leilão dos ativos e arquivá-lo no histórico.
+	 * identificar e notificar o vencedor e o vendedor (caso exista transação), 
+	 * remover o leilão dos ativos e arquivá-lo no histórico.
 	 * </p>
 	 * @param idLeilao O identificador numérico único do leilão que deve ser encerrado.
 	 */
 	public void encerrarLeilao(int idLeilao) {
-				Leilao l = this.catalogoLeiloes.getLeilao(idLeilao);
-				
-				if (l != null) {
-					l.fechar();
-					
-					Utilizador vencedor = l.getVencedor();
-					Utilizador vendedor = l.getVendedor();
-					
-					if (vencedor != null) {
-						vencedor.notificarDispFormulario(l);
-					}
-					if (vendedor != null) {
-						vendedor.notificarDispFormulario(l);
-					}
-					
-					this.catalogoLeiloes.removerLeilao(idLeilao);
-					
-					this.historicoLeiloes.arquivar(l);
-					
-					System.out.println("Leilão " + idLeilao + " encerrado e arquivado com sucesso!");
-				} else {
-					System.out.println("Erro: Leilão " + idLeilao + " não encontrado no catálogo.");
+		Leilao l = this.catalogoLeiloes.getLeilao(idLeilao);
+		
+		if (l != null) {
+			l.fechar();
+			
+			Utilizador vencedor = l.getVencedor();
+			Utilizador vendedor = l.getVendedor();
+			
+			if (vencedor != null) {
+				// Houve um vencedor entao Ambos recebem o formulário de avaliação da transação.
+				vencedor.notificarDispFormulario(l);
+				if (vendedor != null) {
+					vendedor.notificarDispFormulario(l);
 				}
+			} else {
+				// Leilão sem licitacoes Avisa apenas o vendedor que não houve negócio.
+				if (vendedor != null) {
+					System.out.println("Notificação para [" + vendedor.getUsername() + "]: O leilão ID " + l.getIdLeilao() + " foi encerrado sem licitações. Nenhuma transação foi realizada.");
+				}
+			}
+			
+			this.catalogoLeiloes.removerLeilao(idLeilao);
+			
+			this.historicoLeiloes.arquivar(l);
+			
+			System.out.println("Leilão " + idLeilao + " encerrado e arquivado com sucesso!");
+		} else {
+			System.out.println("Erro: Leilão " + idLeilao + " não encontrado no catálogo.");
+		}
 	}
 	
 	/**
@@ -70,6 +76,3 @@ public class GestorLeilao {
 	    return this.idGestor;
 	}
 }
-
-
-
