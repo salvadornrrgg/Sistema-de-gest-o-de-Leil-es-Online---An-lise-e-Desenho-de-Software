@@ -37,5 +37,3 @@ Ao iniciar, o menu apresenta duas opções principais:
 
 
 
----
-*Projeto desenvolvido para fins académicos no âmbito da Licenciatura em Tecnologias da Informação.*
